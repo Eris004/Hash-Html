@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #output {
+            margin-top: 10px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hash Generator</h1>
+    <input type="text" id="text" placeholder="Enter text">
+    <select id="algorithm">
+        <option value="SHA-256">SHA-256</option>
+        <option value="SHA-1">SHA-1</option>
+        <option value="MD5">MD5</option>
+    </select>
+    <button onclick="generateHash()">Generate Hash</button>
+    <p id="output"></p>
+
+    <script>
+        async function generateHash() {
+            const text = document.getElementById('text').value;
+            const algorithm = document.getElementById('algorithm').value;
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const hashBuffer = await crypto.subtle.digest(algorithm, data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+            document.getElementById('output').textContent = `Hash: ${hashHex}`;
+        }
+    </script>
+</body>
+</html>
